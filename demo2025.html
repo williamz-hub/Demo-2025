@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo 2025 - Year 2025 Utility</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: #fff;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .result {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            min-height: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .facts-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .facts-list li {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid #FFD700;
+        }
+
+        .date-input {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px;
+            width: 80px;
+        }
+
+        .date-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 Demo 2025 🎉</h1>
+        <p class="subtitle">Your go-to utility for all things 2025!</p>
+
+        <div class="section">
+            <h2>📅 Date Calculations</h2>
+            <button onclick="calculateDaysUntilNewYear()">Days Until/Since New Year 2025</button>
+            <button onclick="calculateDaysSince2025()">Days Since 2025 Started</button>
+            <div id="dateResult" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h2>📚 Interesting Facts About 2025</h2>
+            <button onclick="showFacts()">Show 2025 Facts</button>
+            <div id="factsResult" class="result">
+                <ul id="factsList" class="facts-list"></ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🗓️ Date Day Checker</h2>
+            <p>Enter a date to see what day of the week it falls on in 2025:</p>
+            <input type="number" id="month" class="date-input" placeholder="Month" min="1" max="12">
+            <input type="number" id="day" class="date-input" placeholder="Day" min="1" max="31">
+            <button onclick="checkDateDay()">Check Day</button>
+            <div id="dayResult" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculateDaysUntilNewYear() {
+            const today = new Date();
+            const newYear2025 = new Date(2025, 0, 1); // January 1, 2025
+            
+            let message;
+            if (today >= newYear2025) {
+                const nextNewYear = new Date(today.getFullYear() + 1, 0, 1);
+                const diffTime = nextNewYear - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                message = `🎊 New Year 2025 has passed! Days until next New Year: ${diffDays}`;
+            } else {
+                const diffTime = newYear2025 - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                message = `⏰ Days until New Year 2025: ${diffDays}`;
+            }
+            
+            document.getElementById('dateResult').innerHTML = message;
+        }
+
+        function calculateDaysSince2025() {
+            const today = new Date();
+            const start2025 = new Date(2025, 0, 1);
+            
+            let message;
+            if (today < start2025) {
+                message = "⏳ 2025 hasn't started yet!";
+            } else {
+                const diffTime = today - start2025;
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                message = `📈 Days since 2025 started: ${diffDays}`;
+            }
+            
+            document.getElementById('dateResult').innerHTML = message;
+        }
+
+        function showFacts() {
+            const facts = [
+                "🗓️ 2025 is not a leap year",
+                "📅 2025 starts on a Wednesday", 
+                "🔢 2025 = 5² × 3⁴ (factorization: 5² × 81)",
+                "🌟 2025 is a perfect square (45²)",
+                "📖 The Chinese zodiac animal for 2025 is the Snake", 
+                "🎯 2025 marks 25 years since the year 2000"
+            ];
+            
+            const factsList = document.getElementById('factsList');
+            factsList.innerHTML = '';
+            
+            facts.forEach(fact => {
+                const li = document.createElement('li');
+                li.textContent = fact;
+                factsList.appendChild(li);
+            });
+        }
+
+        function checkDateDay() {
+            const month = parseInt(document.getElementById('month').value);
+            const day = parseInt(document.getElementById('day').value);
+            
+            if (!month || !day || month < 1 || month > 12 || day < 1 || day > 31) {
+                document.getElementById('dayResult').innerHTML = '❌ Please enter valid month (1-12) and day (1-31)';
+                return;
+            }
+            
+            try {
+                const date2025 = new Date(2025, month - 1, day);
+                
+                // Check if the date is valid
+                if (date2025.getMonth() !== month - 1) {
+                    document.getElementById('dayResult').innerHTML = '❌ Invalid date for the specified month';
+                    return;
+                }
+                
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+                
+                const dayName = days[date2025.getDay()];
+                const monthName = months[month - 1];
+                
+                document.getElementById('dayResult').innerHTML = 
+                    `📅 ${monthName} ${day}, 2025 falls on a <strong>${dayName}</strong>`;
+            } catch (error) {
+                document.getElementById('dayResult').innerHTML = '❌ Invalid date';
+            }
+        }
+
+        // Initialize with a welcome message
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('dateResult').innerHTML = '👆 Click a button above to see date calculations!';
+            document.getElementById('dayResult').innerHTML = '👆 Enter a date and click "Check Day" to see what day it falls on in 2025!';
+        });
+    </script>
+</body>
+</html>
