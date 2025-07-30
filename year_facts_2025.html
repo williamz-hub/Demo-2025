@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 Year Facts Utility</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #4a4a4a;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .highlight {
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .output {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 100px;
+            white-space: pre-line;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        .fact-item {
+            background: #e3f2fd;
+            margin: 10px 0;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .math-property {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .math-property:last-child {
+            border-bottom: none;
+        }
+        
+        .property-name {
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .property-value {
+            color: #667eea;
+            font-family: monospace;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 <span class="highlight">2025</span> Year Facts Utility</h1>
+        
+        <div class="button-group">
+            <button onclick="showRandomFact()">🎲 Random Fact</button>
+            <button onclick="showAllFacts()">📚 All Facts</button>
+            <button onclick="showHistoricalContext()">🏛️ Historical Context</button>
+            <button onclick="showMathProperties()">🔢 Math Properties</button>
+            <button onclick="showDaysCount()">📅 Days Until/Since 2025</button>
+            <button onclick="clearOutput()">🗑️ Clear</button>
+        </div>
+        
+        <div id="output" class="output">
+            Welcome to the 2025 Year Facts Utility! 
+            Click any button above to explore interesting facts about the year 2025.
+        </div>
+    </div>
+
+    <script>
+        // Facts data
+        const facts = [
+            "2025 is the first year of the second quarter of the 21st century.",
+            "2025 marks 30 years since the release of Windows 95.",
+            "In 2025, Generation Alpha (born after 2010) will be in their teens.",
+            "2025 will be 80 years since the end of World War II.",
+            "The year 2025 has 365 days (not a leap year).",
+            "2025 is an odd number and the square of 45 (45² = 2025).",
+            "Many companies have set sustainability goals to achieve by 2025.",
+            "2025 will mark 60 years since the first commercial email was sent.",
+            "In Roman numerals, 2025 is written as MMXXV.",
+            "2025 is exactly 25 years after the millennium celebrations of 2000."
+        ];
+        
+        const historicalContext = [
+            "25 years ago (2000): Y2K concerns, dot-com boom",
+            "50 years ago (1975): Microsoft founded, Vietnam War ended",
+            "75 years ago (1950): Korean War began, first credit card issued",
+            "100 years ago (1925): Television was demonstrated publicly for the first time"
+        ];
+        
+        function showRandomFact() {
+            const randomFact = facts[Math.floor(Math.random() * facts.length)];
+            const output = document.getElementById('output');
+            output.innerHTML = `<div class="fact-item"><strong>🎲 Random Fact About 2025:</strong><br><br>${randomFact}</div>`;
+        }
+        
+        function showAllFacts() {
+            const output = document.getElementById('output');
+            let html = '<strong>📚 All Facts About 2025:</strong><br><br>';
+            facts.forEach((fact, index) => {
+                html += `<div class="fact-item">${index + 1}. ${fact}</div>`;
+            });
+            output.innerHTML = html;
+        }
+        
+        function showHistoricalContext() {
+            const output = document.getElementById('output');
+            let html = '<strong>🏛️ Historical Context:</strong><br><br>';
+            historicalContext.forEach(context => {
+                html += `<div class="fact-item">• ${context}</div>`;
+            });
+            output.innerHTML = html;
+        }
+        
+        function showMathProperties() {
+            const output = document.getElementById('output');
+            const props = {
+                'Square Root': '45',
+                'Perfect Square': 'Yes',
+                'Factors': '1, 3, 5, 9, 15, 25, 27, 45, 75, 81, 135, 225, 243, 405, 675, 1215, 2025',
+                'Prime Number': 'No',
+                'Binary': '11111101001',
+                'Hexadecimal': '7E9'
+            };
+            
+            let html = '<strong>🔢 Mathematical Properties of 2025:</strong><br><br>';
+            for (const [prop, value] of Object.entries(props)) {
+                html += `<div class="math-property">
+                    <span class="property-name">${prop}:</span>
+                    <span class="property-value">${value}</span>
+                </div>`;
+            }
+            output.innerHTML = html;
+        }
+        
+        function showDaysCount() {
+            const now = new Date();
+            const year2025 = new Date('2025-01-01');
+            const diffTime = Math.abs(year2025 - now);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            const output = document.getElementById('output');
+            let message;
+            
+            if (now < year2025) {
+                message = `Days until 2025: ${diffDays}`;
+            } else {
+                message = `Days since 2025 began: ${diffDays}`;
+            }
+            
+            output.innerHTML = `<div class="fact-item"><strong>📅 Time Calculation:</strong><br><br>${message}</div>`;
+        }
+        
+        function clearOutput() {
+            const output = document.getElementById('output');
+            output.innerHTML = 'Welcome to the 2025 Year Facts Utility! Click any button above to explore interesting facts about the year 2025.';
+        }
+        
+        // Show a random fact on page load
+        window.onload = function() {
+            setTimeout(showRandomFact, 1000);
+        };
+    </script>
+</body>
+</html>
