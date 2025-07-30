@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo-2025 - Web Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            border-bottom: 2px solid #007acc;
+            padding-bottom: 10px;
+        }
+        .demo-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        button {
+            background-color: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #005999;
+        }
+        .output {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e8f4f8;
+            border-left: 4px solid #007acc;
+            min-height: 20px;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Demo-2025 Web Demo</h1>
+        
+        <div class="demo-section">
+            <h3>Welcome Demo</h3>
+            <p>This is a simple web-based demo for the Demo-2025 repository.</p>
+            <button onclick="showWelcome()">Show Welcome Message</button>
+            <div id="welcome-output" class="output"></div>
+        </div>
+
+        <div class="demo-section">
+            <h3>Simple Calculator</h3>
+            <input type="number" id="num1" placeholder="First number" />
+            <input type="number" id="num2" placeholder="Second number" />
+            <br>
+            <button onclick="calculate('add')">Add</button>
+            <button onclick="calculate('subtract')">Subtract</button>
+            <button onclick="calculate('multiply')">Multiply</button>
+            <button onclick="calculate('divide')">Divide</button>
+            <div id="calc-output" class="output"></div>
+        </div>
+
+        <div class="demo-section">
+            <h3>Text Demo</h3>
+            <input type="text" id="text-input" placeholder="Enter some text" />
+            <br>
+            <button onclick="reverseText()">Reverse Text</button>
+            <button onclick="uppercaseText()">Uppercase</button>
+            <button onclick="getTextInfo()">Text Info</button>
+            <div id="text-output" class="output"></div>
+        </div>
+
+        <div class="demo-section">
+            <h3>Demo Information</h3>
+            <p>This demo showcases:</p>
+            <ul>
+                <li>Basic HTML structure</li>
+                <li>CSS styling</li>
+                <li>JavaScript functionality</li>
+                <li>Interactive elements</li>
+                <li>Simple calculations</li>
+                <li>Text manipulation</li>
+            </ul>
+            <button onclick="showDemoInfo()">Show Technical Details</button>
+            <div id="info-output" class="output"></div>
+        </div>
+    </div>
+
+    <script>
+        function showWelcome() {
+            const now = new Date();
+            const output = document.getElementById('welcome-output');
+            output.innerHTML = `
+                <strong>Welcome to Demo-2025!</strong><br>
+                Current time: ${now.toLocaleString()}<br>
+                Thanks for trying our web demo!
+            `;
+        }
+
+        function calculate(operation) {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            const output = document.getElementById('calc-output');
+
+            if (isNaN(num1) || isNaN(num2)) {
+                output.innerHTML = '<span style="color: red;">Please enter valid numbers</span>';
+                return;
+            }
+
+            let result;
+            let symbol;
+
+            switch (operation) {
+                case 'add':
+                    result = num1 + num2;
+                    symbol = '+';
+                    break;
+                case 'subtract':
+                    result = num1 - num2;
+                    symbol = '-';
+                    break;
+                case 'multiply':
+                    result = num1 * num2;
+                    symbol = '*';
+                    break;
+                case 'divide':
+                    if (num2 === 0) {
+                        output.innerHTML = '<span style="color: red;">Cannot divide by zero!</span>';
+                        return;
+                    }
+                    result = num1 / num2;
+                    symbol = '/';
+                    break;
+                default:
+                    output.innerHTML = '<span style="color: red;">Unknown operation</span>';
+                    return;
+            }
+
+            output.innerHTML = `<strong>${num1} ${symbol} ${num2} = ${result}</strong>`;
+        }
+
+        function reverseText() {
+            const text = document.getElementById('text-input').value;
+            const output = document.getElementById('text-output');
+            
+            if (!text) {
+                output.innerHTML = '<span style="color: red;">Please enter some text</span>';
+                return;
+            }
+            
+            const reversed = text.split('').reverse().join('');
+            output.innerHTML = `<strong>Reversed:</strong> ${reversed}`;
+        }
+
+        function uppercaseText() {
+            const text = document.getElementById('text-input').value;
+            const output = document.getElementById('text-output');
+            
+            if (!text) {
+                output.innerHTML = '<span style="color: red;">Please enter some text</span>';
+                return;
+            }
+            
+            output.innerHTML = `<strong>Uppercase:</strong> ${text.toUpperCase()}`;
+        }
+
+        function getTextInfo() {
+            const text = document.getElementById('text-input').value;
+            const output = document.getElementById('text-output');
+            
+            if (!text) {
+                output.innerHTML = '<span style="color: red;">Please enter some text</span>';
+                return;
+            }
+            
+            const charCount = text.length;
+            const wordCount = text.trim().split(/\s+/).length;
+            
+            output.innerHTML = `
+                <strong>Text Analysis:</strong><br>
+                Characters: ${charCount}<br>
+                Words: ${wordCount}<br>
+                First character: "${text.charAt(0)}"<br>
+                Last character: "${text.charAt(text.length - 1)}"
+            `;
+        }
+
+        function showDemoInfo() {
+            const output = document.getElementById('info-output');
+            output.innerHTML = `
+                <strong>Technical Details:</strong><br>
+                Browser: ${navigator.userAgent.split(')')[0])})<br>
+                Screen Resolution: ${screen.width}x${screen.height}<br>
+                Current URL: ${window.location.href}<br>
+                Demo Version: 1.0<br>
+                Language: JavaScript + HTML + CSS
+            `;
+        }
+    </script>
+</body>
+</html>
