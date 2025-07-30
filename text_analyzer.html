@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Analysis Utility - Demo 10</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 600px;
+        }
+
+        .input-section {
+            padding: 30px;
+            background: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .results-section {
+            padding: 30px;
+            background: white;
+        }
+
+        .input-section h2 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .textarea-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #textInput {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        #textInput:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .char-counter {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .results-section h2 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .analysis-section {
+            margin-top: 20px;
+        }
+
+        .analysis-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4facfe;
+        }
+
+        .analysis-card h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .word-tag {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .sentiment {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sentiment.positive {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+        }
+
+        .sentiment.negative {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+        }
+
+        .sentiment.neutral, .sentiment.mixed {
+            background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+            color: white;
+        }
+
+        .loading {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .sample-texts {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .sample-texts h3 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .sample-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .sample-btn:hover {
+            background: #5a6268;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .input-section {
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .results-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        .no-results {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Text Analysis Utility</h1>
+            <p>Comprehensive text analysis with insights and statistics</p>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <h2>📝 Enter Your Text</h2>
+                <div class="textarea-container">
+                    <textarea id="textInput" placeholder="Type or paste your text here for analysis..."></textarea>
+                    <div class="char-counter" id="charCounter">0 characters</div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn" onclick="analyzeText()">Analyze Text</button>
+                    <button class="btn btn-secondary" onclick="clearText()">Clear</button>
+                </div>
+
+                <div class="sample-texts">
+                    <h3>📄 Try Sample Texts:</h3>
+                    <button class="sample-btn" onclick="loadSample('positive')">Positive Review</button>
+                    <button class="sample-btn" onclick="loadSample('negative')">Negative Review</button>
+                    <button class="sample-btn" onclick="loadSample('technical')">Technical Text</button>
+                    <button class="sample-btn" onclick="loadSample('creative')">Creative Writing</button>
+                </div>
+            </div>
+
+            <div class="results-section">
+                <h2>📊 Analysis Results</h2>
+                <div id="results">
+                    <div class="no-results">
+                        Enter some text and click "Analyze Text" to see detailed analysis results here.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample texts for demonstration
+        const sampleTexts = {
+            positive: "This is an absolutely amazing product! I love everything about it. The quality is excellent, the design is beautiful, and the customer service is outstanding. I would definitely recommend this to anyone looking for a great solution. It has exceeded all my expectations and made my life so much easier. Truly wonderful!",
+            
+            negative: "This product is terrible and completely useless. I hate everything about it. The quality is awful, the design is ugly, and the customer service is horrible. I would never recommend this to anyone. It's a complete waste of money and time. Absolutely disappointing and frustrating experience.",
+            
+            technical: "The implementation utilizes advanced algorithms to optimize performance and ensure scalability. The system architecture incorporates microservices design patterns with containerized deployment using Docker and Kubernetes. Data processing pipelines leverage Apache Kafka for real-time streaming analytics.",
+            
+            creative: "The moonlight danced across the peaceful lake, creating ripples of silver that seemed to whisper ancient secrets. A gentle breeze carried the scent of blooming jasmine through the warm summer night. In the distance, an owl hooted softly, adding to the symphony of nature's evening chorus."
+        };
+
+        // Text analysis class (JavaScript version)
+        class TextAnalyzer {
+            constructor() {
+                this.wpm = 200; // words per minute
+                this.positiveWords = new Set([
+                    'good', 'great', 'excellent', 'amazing', 'wonderful', 'fantastic',
+                    'awesome', 'brilliant', 'perfect', 'outstanding', 'superb', 'marvelous',
+                    'love', 'like', 'enjoy', 'happy', 'pleased', 'delighted', 'excited',
+                    'beautiful', 'nice', 'best', 'better', 'incredible', 'magnificent'
+                ]);
+                
+                this.negativeWords = new Set([
+                    'bad', 'terrible', 'awful', 'horrible', 'disgusting', 'hate', 'dislike',
+                    'sad', 'angry', 'frustrated', 'disappointed', 'upset', 'annoyed',
+                    'worst', 'worse', 'boring', 'stupid', 'ridiculous', 'pathetic',
+                    'useless', 'worthless', 'nightmare', 'disaster', 'failure'
+                ]);
+
+                this.stopWords = new Set([
+                    'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
+                    'of', 'with', 'by', 'from', 'up', 'about', 'into', 'through', 'during',
+                    'before', 'after', 'above', 'below', 'between', 'among', 'is', 'are',
+                    'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does',
+                    'did', 'will', 'would', 'should', 'could', 'can', 'may', 'might', 'must',
+                    'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'her', 'us',
+                    'them', 'my', 'your', 'his', 'her', 'its', 'our', 'their', 'this', 'that',
+                    'these', 'those', 'what', 'when', 'where', 'why', 'how', 'who'
+                ]);
+            }
+
+            analyzeText(text) {
+                if (!text.trim()) {
+                    return { error: 'Please provide some text to analyze.' };
+                }
+
+                const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+                const charCount = text.length;
+                const charCountNoSpaces = text.replace(/\s/g, '').length;
+                
+                const sentences = this.countSentences(text);
+                const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim()).length;
+                
+                const readingTime = Math.max(1, Math.round(wordCount / this.wpm));
+                const commonWords = this.getCommonWords(text, 5);
+                const sentiment = this.analyzeSentiment(text);
+                
+                const avgWordLength = this.averageWordLength(text);
+                const avgSentenceLength = wordCount / Math.max(1, sentences);
+
+                return {
+                    wordCount,
+                    charCount,
+                    charCountNoSpaces,
+                    sentenceCount: sentences,
+                    paragraphCount: paragraphs,
+                    readingTimeMinutes: readingTime,
+                    avgWordLength: Math.round(avgWordLength * 10) / 10,
+                    avgSentenceLength: Math.round(avgSentenceLength * 10) / 10,
+                    commonWords,
+                    sentiment
+                };
+            }
+
+            countSentences(text) {
+                const matches = text.match(/[.!?]+/g);
+                return Math.max(1, matches ? matches.length : 1);
+            }
+
+            getCommonWords(text, topN = 5) {
+                const words = text.toLowerCase().match(/\b[a-zA-Z]+\b/g) || [];
+                const meaningfulWords = words.filter(word => 
+                    !this.stopWords.has(word) && word.length > 2
+                );
+
+                const wordCounts = {};
+                meaningfulWords.forEach(word => {
+                    wordCounts[word] = (wordCounts[word] || 0) + 1;
+                });
+
+                return Object.entries(wordCounts)
+                    .sort(([,a], [,b]) => b - a)
+                    .slice(0, topN);
+            }
+
+            analyzeSentiment(text) {
+                const words = text.toLowerCase().match(/\b[a-zA-Z]+\b/g) || [];
+                
+                const positiveCount = words.filter(word => this.positiveWords.has(word)).length;
+                const negativeCount = words.filter(word => this.negativeWords.has(word)).length;
+                
+                const totalSentimentWords = positiveCount + negativeCount;
+                
+                let label, confidence;
+                
+                if (totalSentimentWords === 0) {
+                    label = 'Neutral';
+                    confidence = 'N/A';
+                } else if (positiveCount > negativeCount) {
+                    label = 'Positive';
+                    confidence = Math.round(positiveCount / totalSentimentWords * 100) + '%';
+                } else if (negativeCount > positiveCount) {
+                    label = 'Negative';
+                    confidence = Math.round(negativeCount / totalSentimentWords * 100) + '%';
+                } else {
+                    label = 'Mixed';
+                    confidence = '50%';
+                }
+
+                return {
+                    label,
+                    confidence,
+                    positiveWords: positiveCount,
+                    negativeWords: negativeCount
+                };
+            }
+
+            averageWordLength(text) {
+                const words = text.match(/\b[a-zA-Z]+\b/g) || [];
+                if (words.length === 0) return 0;
+                return words.reduce((sum, word) => sum + word.length, 0) / words.length;
+            }
+        }
+
+        // Initialize analyzer
+        const analyzer = new TextAnalyzer();
+
+        // Update character counter
+        function updateCharCounter() {
+            const text = document.getElementById('textInput').value;
+            document.getElementById('charCounter').textContent = `${text.length} characters`;
+        }
+
+        // Load sample text
+        function loadSample(type) {
+            const textInput = document.getElementById('textInput');
+            textInput.value = sampleTexts[type];
+            updateCharCounter();
+            analyzeText();
+        }
+
+        // Clear text
+        function clearText() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('results').innerHTML = `
+                <div class="no-results">
+                    Enter some text and click "Analyze Text" to see detailed analysis results here.
+                </div>
+            `;
+            updateCharCounter();
+        }
+
+        // Main analysis function
+        function analyzeText() {
+            const text = document.getElementById('textInput').value;
+            const resultsDiv = document.getElementById('results');
+            
+            if (!text.trim()) {
+                resultsDiv.innerHTML = `
+                    <div class="no-results">
+                        Please enter some text to analyze.
+                    </div>
+                `;
+                return;
+            }
+
+            // Show loading
+            resultsDiv.innerHTML = '<div class="loading">Analyzing text...</div>';
+            
+            // Simulate a small delay for better UX
+            setTimeout(() => {
+                const analysis = analyzer.analyzeText(text);
+                displayResults(analysis);
+            }, 300);
+        }
+
+        // Display analysis results
+        function displayResults(analysis) {
+            if (analysis.error) {
+                document.getElementById('results').innerHTML = `
+                    <div class="no-results">${analysis.error}</div>
+                `;
+                return;
+            }
+
+            const resultsHTML = `
+                <div class="results-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">${analysis.wordCount.toLocaleString()}</div>
+                        <div class="stat-label">Words</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${analysis.charCount.toLocaleString()}</div>
+                        <div class="stat-label">Characters</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${analysis.sentenceCount}</div>
+                        <div class="stat-label">Sentences</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${analysis.readingTimeMinutes}</div>
+                        <div class="stat-label">Min. Read</div>
+                    </div>
+                </div>
+
+                <div class="analysis-section">
+                    <div class="analysis-card">
+                        <h3>📈 Complexity Metrics</h3>
+                        <p><strong>Average Word Length:</strong> ${analysis.avgWordLength} characters</p>
+                        <p><strong>Average Sentence Length:</strong> ${analysis.avgSentenceLength} words</p>
+                        <p><strong>Characters (no spaces):</strong> ${analysis.charCountNoSpaces.toLocaleString()}</p>
+                        <p><strong>Paragraphs:</strong> ${analysis.paragraphCount}</p>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3>🔍 Most Common Words</h3>
+                        <div class="word-list">
+                            ${analysis.commonWords.length > 0 
+                                ? analysis.commonWords.map(([word, count]) => 
+                                    `<span class="word-tag">${word} (${count})</span>`
+                                ).join('')
+                                : '<span style="color: #6c757d;">No significant words found</span>'
+                            }
+                        </div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3>😊 Sentiment Analysis</h3>
+                        <p><strong>Overall Sentiment:</strong> 
+                            <span class="sentiment ${analysis.sentiment.label.toLowerCase()}">
+                                ${analysis.sentiment.label}
+                            </span>
+                        </p>
+                        <p><strong>Confidence:</strong> ${analysis.sentiment.confidence}</p>
+                        <p><strong>Positive indicators:</strong> ${analysis.sentiment.positiveWords}</p>
+                        <p><strong>Negative indicators:</strong> ${analysis.sentiment.negativeWords}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('results').innerHTML = resultsHTML;
+        }
+
+        // Event listeners
+        document.getElementById('textInput').addEventListener('input', updateCharCounter);
+        document.getElementById('textInput').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                analyzeText();
+            }
+        });
+
+        // Initialize
+        updateCharCounter();
+    </script>
+</body>
+</html>
