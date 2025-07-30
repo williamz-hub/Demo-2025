@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo 4 - Interactive Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        
+        .counter-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        .counter-title {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .counter-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2563eb;
+            margin: 1rem 0;
+            padding: 1rem;
+            background-color: #f8fafc;
+            border-radius: 5px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .counter-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .counter-btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-increment {
+            background-color: #22c55e;
+            color: white;
+        }
+        
+        .btn-increment:hover {
+            background-color: #16a34a;
+            transform: translateY(-1px);
+        }
+        
+        .btn-decrement {
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .btn-decrement:hover {
+            background-color: #dc2626;
+            transform: translateY(-1px);
+        }
+        
+        .btn-reset {
+            background-color: #6b7280;
+            color: white;
+            margin-top: 1rem;
+        }
+        
+        .btn-reset:hover {
+            background-color: #4b5563;
+            transform: translateY(-1px);
+        }
+        
+        .counter-info {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="counter-container">
+        <h1 class="counter-title">Demo 4: Interactive Counter</h1>
+        <div class="counter-display" id="counterDisplay">0</div>
+        <div class="counter-buttons">
+            <button class="counter-btn btn-decrement" id="decrementBtn">-</button>
+            <button class="counter-btn btn-increment" id="incrementBtn">+</button>
+        </div>
+        <button class="counter-btn btn-reset" id="resetBtn">Reset</button>
+        <div class="counter-info">
+            Click the buttons to change the counter value
+        </div>
+    </div>
+
+    <script>
+        // Counter application logic
+        let counter = 0;
+        
+        // Get DOM elements
+        const counterDisplay = document.getElementById('counterDisplay');
+        const incrementBtn = document.getElementById('incrementBtn');
+        const decrementBtn = document.getElementById('decrementBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        
+        // Update display function
+        function updateDisplay() {
+            counterDisplay.textContent = counter;
+            
+            // Add visual feedback for positive/negative numbers
+            if (counter > 0) {
+                counterDisplay.style.color = '#22c55e';
+            } else if (counter < 0) {
+                counterDisplay.style.color = '#ef4444';
+            } else {
+                counterDisplay.style.color = '#2563eb';
+            }
+        }
+        
+        // Event listeners
+        incrementBtn.addEventListener('click', () => {
+            counter++;
+            updateDisplay();
+        });
+        
+        decrementBtn.addEventListener('click', () => {
+            counter--;
+            updateDisplay();
+        });
+        
+        resetBtn.addEventListener('click', () => {
+            counter = 0;
+            updateDisplay();
+        });
+        
+        // Keyboard support
+        document.addEventListener('keydown', (event) => {
+            switch(event.key) {
+                case 'ArrowUp':
+                case '+':
+                    counter++;
+                    updateDisplay();
+                    event.preventDefault();
+                    break;
+                case 'ArrowDown':
+                case '-':
+                    counter--;
+                    updateDisplay();
+                    event.preventDefault();
+                    break;
+                case 'r':
+                case 'R':
+                    counter = 0;
+                    updateDisplay();
+                    event.preventDefault();
+                    break;
+            }
+        });
+        
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
